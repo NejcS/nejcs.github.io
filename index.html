@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+            }
+
+            .container {
+                position: relative;
+                width: 821px;
+            }
+
+            .dot-container {
+                position: absolute;
+                top: 48px;
+                bottom: 9px;
+                left: 9px;
+                right: 9px;
+            }
+
+            #dot {
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                background-color: black;
+                border-radius: 5px;
+                margin-left: -5px;
+                margin-top: -5px;
+            }
+
+            img {
+                width: 100%;
+            }
+        </style>
+        <script>
+            let westernmost = 12.1438;
+            let easternmost = 17.4133;
+            let northernmost = 47.6275;
+            let southernmost = 44.7396;
+
+            let longitudeToPercent = (long) => {
+                return 100 - ((easternmost - long) / (easternmost - westernmost) * 100);
+            };
+
+            let latitudeToPercent = (lat) => {
+                return (northernmost - lat) / (northernmost - southernmost) * 100;
+            };
+
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition((position) => {console.log(position.coords.latitude + ', ' + position.coords.longitude);
+                    let latitude = position.coords.latitude;
+                    let longitude = position.coords.longitude;
+                    let dot = document.getElementById('dot');
+                    // Murska Sobota:
+                    // latitude = 46.6613;
+                    // longitude = 16.1651;
+
+                    dot.style.top = `${latitudeToPercent(latitude)}%`;;
+                    dot.style.left = `${longitudeToPercent(longitude)}%`;
+                }, (error) => {
+                    alert(`Error: ${error.message}`);
+                }, {
+                    enableHighAccuracy: true
+                });
+            } else {
+                alert('Geolocation is not supported in your browser.');
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="dot-container">
+                <div id="dot"></div>
+            </div>
+            <img src="http://www.arso.gov.si/vreme/napovedi%20in%20podatki/radar_anim.gif" />
+        </div>
+    </body>
+</html>
