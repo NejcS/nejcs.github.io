@@ -28,6 +28,7 @@
                 border-radius: 5px;
                 margin-left: -5px;
                 margin-top: -5px;
+                display: none;
             }
 
             img {
@@ -35,17 +36,17 @@
             }
         </style>
         <script>
-            let westernmost = 12.1438;
-            let easternmost = 17.4133;
-            let northernmost = 47.6275;
-            let southernmost = 44.7396;
+            let longMin = 12.1438;
+            let longMax = 17.4133;
+            let latMax = 47.6275;
+            let latMin = 44.7396;
 
             let longitudeToPercent = (long) => {
-                return 100 - ((easternmost - long) / (easternmost - westernmost) * 100);
+                return 100 - ((longMax - long) / (longMax - longMin) * 100);
             };
 
             let latitudeToPercent = (lat) => {
-                return (northernmost - lat) / (northernmost - southernmost) * 100;
+                return (latMax - lat) / (latMax - latMin) * 100;
             };
 
             if ('geolocation' in navigator) {
@@ -57,8 +58,9 @@
                     // latitude = 46.6613;
                     // longitude = 16.1651;
 
-                    dot.style.top = `${latitudeToPercent(latitude)}%`;;
+                    dot.style.top = `${latitudeToPercent(latitude)}%`;
                     dot.style.left = `${longitudeToPercent(longitude)}%`;
+                    dot.style.display = 'block';
                 }, (error) => {
                     alert(`Error: ${error.message}`);
                 }, {
